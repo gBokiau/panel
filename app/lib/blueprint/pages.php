@@ -64,6 +64,7 @@ class Pages extends Obj {
     $obj->mode   = 'default';
     $obj->field  = null;
     $obj->format = null;
+    $obj->displayformat = null;
 
     if(is_array($this->num)) {
       foreach($this->num as $k => $v) $obj->$k = $v;
@@ -73,11 +74,11 @@ class Pages extends Obj {
 
     switch($obj->mode) {
       case 'date':
+      	isset($obj->displayformat) or $obj->displayformat = 'Y/m/d';
         isset($obj->field)  or $obj->field  = 'date';
         isset($obj->format) or $obj->format = 'Ymd';
         break;
     }
-
     return $obj;
 
   }
