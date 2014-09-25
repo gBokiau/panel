@@ -2,7 +2,11 @@
 
 class ThumbField extends RadioField {
   public $columns = 4;
-
+  static public $assets = array(
+    'css' => array(
+      'thumb.css'
+    )
+  );
   public function options() {
   	if (is_array($this->options)) {
 	  	return $this->options;
@@ -10,7 +14,7 @@ class ThumbField extends RadioField {
 	$uri   = trim($this->options, '/');
     $query = str::split($uri, '/');
 	$obj = $this->page;
-	$specials = array('visibleChildren', 'invisibleChildren', 'siblings', 'pages', 'index', 'children', 'files',  'images', 'documents', 'videos', 'audio', 'code', 'archives');
+	$specials = array('visibleChildren', 'visibleImages', 'invisibleChildren', 'siblings', 'pages', 'index', 'children', 'files',  'images', 'documents', 'videos', 'audio', 'code', 'archives');
 	foreach($query as $item) {
 		if (in_array($item, $specials)) {
 			$obj = $this->_items($obj, $item);
@@ -48,6 +52,10 @@ class ThumbField extends RadioField {
         $items = $page->index();
         $items = $items->sortBy('title', 'asc');
         break;
+      case 'visibleImages':
+      	$items = $page->images()->filterBy('visible', '1');
+        $items = $items->sortBy('sort', 'asc');
+        break;
       case 'children':
       case 'files':
       case 'images':
@@ -63,13 +71,23 @@ class ThumbField extends RadioField {
    }
   public function item($value, $text) {
     $input = $this->input($value);
-    $img = (string) thumb($text, array('width' => 300, 'height' => '200', 'crop' => true));
-    $label = new Brick('label', $img);
-    $label->addClass('input');
-    $label->attr('data-focus', 'true');
-    $label->prepend($input);
-
-    return $label;
+    $input->attr('id', md5($value));
+    $img = (string) thumb($text, array('width' => 300, 'height' => 200, 'crop' => 1));
+    $link = new Brick('a', $img);
+    $link->addClass('file-preview');
+    $link->addClass('file-preview-is-image');
+    $label = new Brick('label', '&nbsp;');
+    $label->attr('for', md5($value));
+    $figcaption = new Brick('figcaption', $text->title());
+    $figcaption->addClass('file-info');
+    $nav = new Brick('nav', $input);
+    $nav->append($label);
+    $figure = new Brick('figure', $link);
+    $figure->addClass('input');
+    $figure->attr('data-focus', 'true');
+    $figure->append($figcaption);
+    $figure->append($nav);
+    return $figure;
 
   }
   
