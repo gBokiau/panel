@@ -74,9 +74,9 @@ class Pages extends Obj {
 
     switch($obj->mode) {
       case 'date':
-      	isset($obj->displayformat) or $obj->displayformat = 'Y/m/d';
         isset($obj->field)  or $obj->field  = 'date';
         isset($obj->format) or $obj->format = 'Ymd';
+      	isset($obj->displayformat) or $obj->displayformat = $obj->format;
         break;
     }
     return $obj;
