@@ -11,21 +11,22 @@ class CheckboxesField extends RadioField {
       'name'    => $this->name() . '[]',
       'type'    => 'checkbox',
       'value'   => $value,
-      'checked' => in_array($value, (array)$this->value()),
+      'checked' => $this->checked($value),
     ));
     return $input;
 
   }
+  
 
-  public function value() {
+  public function checked($needle) {
 
     $value = parent::value();
 
-    if(is_array($value)) {
-      return $value;
-    } else {
-      return str::split($value, ',');
+    if(!is_array($value)) {
+      $value = str::split($value, ',');
     }
+
+    return in_array($needle, $value) ? 'checked' : '';
 
   }
 
