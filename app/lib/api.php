@@ -109,6 +109,8 @@ class Api {
       case 'date':
         return $page->date($num->format(), $num->field());
         break;
+      case 'field':
+      	return (int) $page->content()->data[$num->field()];
       default:
         return false;
     }
