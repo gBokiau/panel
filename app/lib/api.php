@@ -110,7 +110,7 @@ class Api {
         return $page->date($num->format(), $num->field());
         break;
       case 'field':
-      	return (int) $page->content()->data[$num->field()];
+      	return $page->content()->data[$num->field()];
       default:
         return false;
     }
