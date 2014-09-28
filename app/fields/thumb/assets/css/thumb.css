@@ -1,4 +1,15 @@
-input.radio+label{ width:44px;}
+input.radio+label{ width:44px; float:right;cursor:pointer;}
 input.radio+label:before {content:"\f097"; font-family: Fontawesome;}
 input.radio:checked+label:before {content:"\f02e"}
 input.radio {width:1px; height:1px; visibility: hidden;}
+figure {transition:all;}
+figure.disabled label:before {color:#ccc;}
+figure.disabled  {background:#efefef;border:1px dashed #ddd;padding:.6em}
+figure.input a.file-preview {height:113px; overflow:hidden; transition:all .2s; -webkit-transform:scale(1.2)}
+figure.input.disabled a.file-preview {height:113px; margin:0; -webkit-transform:scale(1)}
+figure .toggle{height:1.5em;padding:3px;color:#ccc;overflow-y:hidden;font-family: Fontawesome;transition:all .2s;float:left;cursor:pointer;}
+figure .toggle:before{transition:margin-top .2s; content:"\f00c";display:block;}
+figure .toggle:after{content:"\f068";display:block;}
+figure.disabled .toggle:hover {color:#222;}
+figure .toggle:hover:before, figure.disabled .toggle:before {margin-top:-1.56em;}
+figure.disabled .toggle:hover:before {margin-top:0;}

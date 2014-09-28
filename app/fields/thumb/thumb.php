@@ -5,6 +5,9 @@ class ThumbField extends RadioField {
   static public $assets = array(
     'css' => array(
       'thumb.css'
+    ),
+    'js'=> array(
+    	'thumb.js'
     )
   );
   public function options() {
@@ -30,6 +33,7 @@ class ThumbField extends RadioField {
           $options[$found->filename()] = $found;
         }
       }
+    $this->options = $options;
     return $options;
   }
 
@@ -65,25 +69,40 @@ class ThumbField extends RadioField {
       case 'code':
       case 'archives':
         $items = $page->{$method}();
+        $items = $items->sortBy('sort', 'asc');
         break;
       }
       return $items;
    }
-  public function item($value, $text) {
+  public function item($value, $image) {
+  	$hasVisibility = !is_null($visible=$image->visible());
+  	$visible = !$hasVisibility || ($visible == "1");
     $input = $this->input($value);
+    if (!$visible)
+    	$input->attr('disabled','disabled');
     $input->attr('id', md5($value));
-    $img = (string) thumb($text, array('width' => 300, 'height' => 200, 'crop' => 1));
+    $img = (string) thumb($image, array('width' => 300, 'height' => 200, 'crop' => 1));
     $link = new Brick('a', $img);
     $link->addClass('file-preview');
     $link->addClass('file-preview-is-image');
     $label = new Brick('label', '&nbsp;');
     $label->attr('for', md5($value));
-    $figcaption = new Brick('figcaption', $text->title());
+    $figcaption = new Brick('figcaption', $image->title());
     $figcaption->addClass('file-info');
+    if ($hasVisibility) {
+    	$input->data('field', 'thumb');
+		$input->data('uri', $this->page()->uri());
+		$json = new Brick('script', json_encode($image->meta()->toArray()));
+		$json->attr('type', 'text/json');
+		$figcaption->append($json);
+    }
     $nav = new Brick('nav', $input);
     $nav->append($label);
+
     $figure = new Brick('figure', $link);
     $figure->addClass('input');
+    if (!$visible)
+      $figure->addClass('disabled');
     $figure->attr('data-focus', 'true');
     $figure->append($figcaption);
     $figure->append($nav);
@@ -97,7 +116,7 @@ class ThumbField extends RadioField {
 
   public function value() {
   	$value = parent::value();
-	return empty($value) ? $this->page()->image()->filename() : $value;
+	return empty($value) ? array_keys($this->options())[0] : $value;
   }
 
 }
