@@ -46,7 +46,7 @@ class HelpersController extends Controller {
             $pages = site()->index();
             break;
           default:
-            $pages = site()->page($index)->children();
+            $pages = page($index)->children();
         }
         $result = $pages->pluck(get('field', 'tags'), get('separator', true), true);
         break;
