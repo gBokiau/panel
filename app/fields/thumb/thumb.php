@@ -116,7 +116,7 @@ class ThumbField extends RadioField {
 
   public function value() {
   	$value = parent::value();
-	return empty($value) ? array_keys($this->options())[0] : $value;
+	return empty($value) ? current(array_keys($this->options())) : $value;
   }
 
 }
