@@ -977,7 +977,10 @@ var UsersController = {
 
     app.modal.view('users/avatar/' + username, {to: to}, function(element) {
 
-      element.find('.dropzone').dropzone($http.endpoint + '/avatars/upload/' + username, function() {
+      var dropzone = element.find('.dropzone');
+      var url      = $http.endpoint + '/avatars/upload/' + username + '?_csrf=' + dropzone.data('csrf');
+
+      dropzone.dropzone(url, function() {
         app.main.data('current', false);
         app.modal.close();
       });
@@ -1496,9 +1499,10 @@ var FilesController = {
 
     app.modal.view('files/upload/' + uri, {to: to}, function(element) {
 
-      var url = $http.endpoint + '/files/upload/' + uri;
+      var dropzone = element.find('.dropzone');
+      var url      = $http.endpoint + '/files/upload/' + uri + '?_csrf=' + dropzone.data('csrf');
 
-      element.find('.dropzone').dropzone(url, function() {
+      dropzone.dropzone(url, function() {
         app.main.data('current', false);
         app.modal.close();
       }, app.modal.alert);
@@ -1515,9 +1519,10 @@ var FilesController = {
 
     app.modal.view(url + '/?filename=' + path.filename, function(element) {
 
-      var url = $http.endpoint + '/files/replace/' + path.uri + '?filename=' + path.filename;
+      var dropzone = element.find('.dropzone');
+      var url      = $http.endpoint + '/files/replace/' + path.uri + '?filename=' + path.filename + '&_csrf=' + dropzone.data('csrf');
 
-      element.find('.dropzone').dropzone(url, function() {
+      dropzone.dropzone(url, function() {
         app.main.data('current', false);
         app.modal.close();
       }, app.modal.alert, {
